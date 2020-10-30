@@ -151,6 +151,7 @@ while running:
 		if event.type == pygame.QUIT:
 			running = False
 
+		# --------- ALL EVENTS / INPUTS ARE IN HERE -------------
 		if event.type == pygame.KEYDOWN:
 			# if we use menu and end, this will only move/control player in the game, not the menus
 			if state is not State.menu and state is not State.end:
@@ -182,6 +183,7 @@ while running:
 			if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
 				playerX_change = 0
 
+	# --------- ALL STATES ARE IN HERE -------------
 	if state is State.level_1:
 		playing_background()
 		print("state 1")
