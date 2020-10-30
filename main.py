@@ -203,7 +203,7 @@ while running:
   
 		# Creating the surface for text
 		title_text = font.render(f'Space invaders', False, (255, 255, 255))
-		start_text = font.render(f'Press any key to start playing', False, (255, 255, 255))
+		start_text = font.render(f'Press enter key to start playing', False, (255, 255, 255))
 
 		screen.blit(title_text, (300, 100))
 		screen.blit(start_text, (300, 270))
