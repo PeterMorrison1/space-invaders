@@ -86,6 +86,38 @@ def isCollision(enemyX, enemyY, bulletX, bulletY):
 	else:
 		return False
 
+def enemy_movement():
+	global score_value, bullet_state, bulletX, bulletY, enemyX, enemyY
+ 
+    # Enemy Movement
+	for i in range(num_enemies):
+
+		# Game Over
+		if enemyY[i] > 440:  # trigger the end of the game
+			for j in range(num_enemies):
+				enemyY[j] = 2000
+			game_over()
+			break
+
+		enemyX[i] += enemyX_change[i]
+		if enemyX[i] <= 0:
+			enemyX_change[i] = 4
+			enemyY[i] += enemyY_change[i]
+		elif enemyX[i] >= 736:
+			enemyX_change[i] = -4
+			enemyY[i] += enemyY_change[i]
+
+		collision = isCollision(enemyX[i], enemyY[i], bulletX, bulletY)
+		if collision:
+			explosion_sound = pygame.mixer.Sound("./media/explosion.wav")
+			explosion_sound.play()
+			bulletY = 480
+			bullet_state = "ready"
+			score_value += 1
+			enemyX[i] = random.randint(0, 800)
+			enemyY[i] = random.randint(50, 150)
+
+		enemy(enemyX[i], enemyY[i], i)
 
 def game_over():  # display the game over text
 	over_font = game_over_font.render("GAME OVER", True, (255, 255, 255))
@@ -154,34 +186,36 @@ while running:
 		playerX = 736
 
 	# Enemy Movement
-	for i in range(num_enemies):
+	enemy_movement()
+ 
+	# for i in range(num_enemies):
 
-		# Game Over
-		if enemyY[i] > 440:  # trigger the end of the game
-			for j in range(num_enemies):
-				enemyY[j] = 2000
-			game_over()
-			break
+	# 	# Game Over
+	# 	if enemyY[i] > 440:  # trigger the end of the game
+	# 		for j in range(num_enemies):
+	# 			enemyY[j] = 2000
+	# 		game_over()
+	# 		break
 
-		enemyX[i] += enemyX_change[i]
-		if enemyX[i] <= 0:
-			enemyX_change[i] = 4
-			enemyY[i] += enemyY_change[i]
-		elif enemyX[i] >= 736:
-			enemyX_change[i] = -4
-			enemyY[i] += enemyY_change[i]
+	# 	enemyX[i] += enemyX_change[i]
+	# 	if enemyX[i] <= 0:
+	# 		enemyX_change[i] = 4
+	# 		enemyY[i] += enemyY_change[i]
+	# 	elif enemyX[i] >= 736:
+	# 		enemyX_change[i] = -4
+	# 		enemyY[i] += enemyY_change[i]
 
-		collision = isCollision(enemyX[i], enemyY[i], bulletX, bulletY)
-		if collision:
-			explosion_sound = pygame.mixer.Sound("./media/explosion.wav")
-			explosion_sound.play()
-			bulletY = 480
-			bullet_state = "ready"
-			score_value += 1
-			enemyX[i] = random.randint(0, 800)
-			enemyY[i] = random.randint(50, 150)
+	# 	collision = isCollision(enemyX[i], enemyY[i], bulletX, bulletY)
+	# 	if collision:
+	# 		explosion_sound = pygame.mixer.Sound("./media/explosion.wav")
+	# 		explosion_sound.play()
+	# 		bulletY = 480
+	# 		bullet_state = "ready"
+	# 		score_value += 1
+	# 		enemyX[i] = random.randint(0, 800)
+	# 		enemyY[i] = random.randint(50, 150)
 
-		enemy(enemyX[i], enemyY[i], i)
+	# 	enemy(enemyX[i], enemyY[i], i)
 
 	# Bullet Animation
 	if bulletY <= 0:
