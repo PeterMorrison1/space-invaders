@@ -2,6 +2,7 @@ import pygame
 import math
 import random
 from enum import Enum
+import sys
 
 pygame.init()
 
@@ -11,6 +12,7 @@ pygame.display.set_caption("Space Invaders")
 
 # Background
 background = pygame.image.load("./media/stars.png")
+menu_color = pygame.Color('grey12')
 
 # Sound
 pygame.mixer.music.load("./media/background.wav")
@@ -89,7 +91,7 @@ def isCollision(enemyX, enemyY, bulletX, bulletY):
 def enemy_movement():
 	global score_value, bullet_state, bulletX, bulletY, enemyX, enemyY
  
-    # Enemy Movement
+	# Enemy Movement
 	for i in range(num_enemies):
 
 		# Game Over
@@ -123,6 +125,10 @@ def game_over():  # display the game over text
 	over_font = game_over_font.render("GAME OVER", True, (255, 255, 255))
 	screen.blit(over_font, (100, 250))
 
+def playing_background():
+    # Screen Attributes
+	screen.fill((0, 0, 0))
+	screen.blit(background, (0, 0))
 
 class State(Enum):
 	menu = 1
@@ -146,37 +152,65 @@ while running:
 			running = False
 
 		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_LEFT:
-				playerX_change = -3
+			# if we use menu and end, this will only move/control player in the game, not the menus
+			if state is not State.menu and state is not State.end:
+				if event.key == pygame.K_LEFT:
+					playerX_change = -3
 
-			if event.key == pygame.K_RIGHT:
-				playerX_change = 3
+				if event.key == pygame.K_RIGHT:
+					playerX_change = 3
 
-			if event.key == pygame.K_SPACE:
-				if bullet_state is "ready":
-					bullet_sound = pygame.mixer.Sound("./media/laser.wav")
-					bullet_sound.play()
-					bulletX = playerX
-					fire_bullet(bulletX, bulletY)
-
+				if event.key == pygame.K_SPACE:
+					if bullet_state is "ready":
+						bullet_sound = pygame.mixer.Sound("./media/laser.wav")
+						bullet_sound.play()
+						bulletX = playerX
+						fire_bullet(bulletX, bulletY)
+			elif state is State.menu or state is State.end:
+				if event.type == pygame.QUIT:
+					pygame.quit()
+					sys.exit()
+				# Check for any user input
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_RETURN:
+						state = State.level_1
+						
+						#Stops the main screen music when the game begins to play
+						pygame.mixer.stop()
+		
 		if event.type == pygame.KEYUP:
 			if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
 				playerX_change = 0
 
 	if state is State.level_1:
+		playing_background()
 		print("state 1")
+		enemy_movement()
 	elif state is State.level_2:
+		playing_background()
 		print("state 2")
+		enemy_movement()
 	elif state is State.level_3:
+		playing_background()
 		print("State 3")
+		enemy_movement()
 	elif state is State.menu:
 		print("Menu")
+		screen.fill(menu_color)
+
+		# Resets scores & name   
+		score_value = 0
+  
+		# Creating the surface for text
+		title_text = font.render(f'Space invaders', False, (255, 255, 255))
+		start_text = font.render(f'Press any key to start playing', False, (255, 255, 255))
+
+		screen.blit(title_text, (300, 100))
+		screen.blit(start_text, (300, 270))
 	elif state is State.end:
 		print("End")
 
-	# Screen Attributes
-	screen.fill((0, 0, 0))
-	screen.blit(background, (0, 0))
+	
 
 	playerX += playerX_change
 
@@ -186,7 +220,7 @@ while running:
 		playerX = 736
 
 	# Enemy Movement
-	enemy_movement()
+	
  
 	# for i in range(num_enemies):
 
