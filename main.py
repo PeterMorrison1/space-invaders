@@ -1,6 +1,7 @@
 import pygame
 import math
 import random
+from enum import Enum
 
 pygame.init()
 
@@ -13,7 +14,7 @@ background = pygame.image.load("./media/stars.png")
 
 # Sound
 pygame.mixer.music.load("./media/background.wav")
-pygame.mixer.music.play(-1) 
+pygame.mixer.music.play(-1)
 
 # Player
 playerImg = pygame.image.load("./media/spaceship.png")
@@ -51,7 +52,9 @@ textX = 10
 textY = 10
 
 # Game Over Text
-game_over_font = pygame.font.Font("./fonts/Square.ttf", 128) #create the font for game over
+# create the font for game over
+game_over_font = pygame.font.Font("./fonts/Square.ttf", 128)
+
 
 def show_score(x, y):
 	score = font.render("Score: "+str(score_value), True, (255, 255, 255))
@@ -76,18 +79,31 @@ def fire_bullet(x, y):
 def isCollision(enemyX, enemyY, bulletX, bulletY):
 
 	distance = math.sqrt(math.pow(enemyX-bulletX, 2) +
-											 math.pow(enemyY-bulletY, 2))
+						 math.pow(enemyY-bulletY, 2))
 
 	if distance < 27:
 		return True
 	else:
 		return False
 
-def game_over(): # display the game over text
+
+def game_over():  # display the game over text
 	over_font = game_over_font.render("GAME OVER", True, (255, 255, 255))
 	screen.blit(over_font, (100, 250))
 
+
+class State(Enum):
+	menu = 1
+	play = 2
+	end = 3
+	pause = 4
+	level_1 = 5
+	level_2 = 6
+	level_3 = 7
+
+
 # Game Loop
+state = State.menu
 running = True
 while running:
 
@@ -113,14 +129,25 @@ while running:
 
 		if event.type == pygame.KEYUP:
 			if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-				playerX_change = 0 
+				playerX_change = 0
+
+	if state is State.level_1:
+		print("state 1")
+	elif state is State.level_2:
+		print("state 2")
+	elif state is State.level_3:
+		print("State 3")
+	elif state is State.menu:
+		print("Menu")
+	elif state is State.end:
+		print("End")
 
 	# Screen Attributes
 	screen.fill((0, 0, 0))
 	screen.blit(background, (0, 0))
 
 	playerX += playerX_change
-	
+
 	if playerX <= 0:
 		playerX = 0
 	elif playerX >= 736:
@@ -129,13 +156,13 @@ while running:
 	# Enemy Movement
 	for i in range(num_enemies):
 
-		#Game Over
-		if enemyY[i] > 440: #trigger the end of the game
+		# Game Over
+		if enemyY[i] > 440:  # trigger the end of the game
 			for j in range(num_enemies):
 				enemyY[j] = 2000
 			game_over()
-			break 
-		
+			break
+
 		enemyX[i] += enemyX_change[i]
 		if enemyX[i] <= 0:
 			enemyX_change[i] = 4
@@ -144,26 +171,26 @@ while running:
 			enemyX_change[i] = -4
 			enemyY[i] += enemyY_change[i]
 
-		collision = isCollision(enemyX[i], enemyY[i], bulletX, bulletY) 
+		collision = isCollision(enemyX[i], enemyY[i], bulletX, bulletY)
 		if collision:
 			explosion_sound = pygame.mixer.Sound("./media/explosion.wav")
 			explosion_sound.play()
 			bulletY = 480
 			bullet_state = "ready"
 			score_value += 1
-			enemyX[i] = random.randint(0, 800) 
-			enemyY[i] = random.randint(50, 150) 
+			enemyX[i] = random.randint(0, 800)
+			enemyY[i] = random.randint(50, 150)
 
 		enemy(enemyX[i], enemyY[i], i)
 
 	# Bullet Animation
 	if bulletY <= 0:
-		bulletY = 480 
-		bullet_state = "ready" 
+		bulletY = 480
+		bullet_state = "ready"
 
-	if bullet_state is "fire": 
+	if bullet_state is "fire":
 		fire_bullet(bulletX, bulletY)
-		bulletY -= bulletY_change 
+		bulletY -= bulletY_change
 
 	player(playerX, playerY)
 	show_score(textX, textY)
