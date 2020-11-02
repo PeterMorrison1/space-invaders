@@ -15,7 +15,7 @@ background = pygame.image.load("./media/stars.png")
 menu_color = pygame.Color('grey12')
 
 # Sound
-pygame.mixer.music.load("./media/background.wav")
+pygame.mixer.music.load("./media/level1_background.ogg")
 pygame.mixer.music.play(-1)
 
 # Player
