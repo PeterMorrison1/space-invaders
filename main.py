@@ -115,7 +115,7 @@ def enemy_movement():
 			explosion_sound.play()
 			bulletY = 480
 			bullet_state = "ready"
-			score_value += 1
+			score_value += score_amount
 			enemyX[i] = random.randint(0, 800)
 			enemyY[i] = random.randint(50, 150)
 
@@ -187,15 +187,21 @@ while running:
 	if state is State.level_1:
 		playing_background()
 		print("state 1")
+		score_amount = 1
 		enemy_movement()
+		
 	elif state is State.level_2:
 		playing_background()
 		print("state 2")
+		score_amount = 5
 		enemy_movement()
+		
 	elif state is State.level_3:
 		playing_background()
 		print("State 3")
+		score_amount = 10
 		enemy_movement()
+		
 	elif state is State.menu:
 		print("Menu")
 		screen.fill(menu_color)
