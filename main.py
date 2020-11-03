@@ -30,14 +30,8 @@ enemyX = []
 enemyY = []
 enemyX_change = []
 enemyY_change = []
-num_enemies = 6
-
-for i in range(num_enemies):
-	enemyImg.append(pygame.image.load("./media/ufo.png"))
-	enemyX.append(random.randint(0, 735))
-	enemyY.append(random.randint(50, 150))
-	enemyX_change.append(4)
-	enemyY_change.append(40)
+total_enemies_killed = 0
+enemies_killed = 0
 
 # Bullet
 bulletImg = pygame.image.load("./media/bullet.png")
@@ -63,13 +57,21 @@ def show_score(x, y):
 	screen.blit(score, (x, y))
 
 
+
 def player(x, y):
 	screen.blit(playerImg, (x, y))
 
 
-def enemy(x, y, i):
+def enemy(x, y, i): #modify for list of enemies
 	screen.blit(enemyImg[i], (x, y))
 
+def create_enemies(num_enemies):
+	for i in range(num_enemies): #loop to create # of enemies
+		enemyImg.append(pygame.image.load("./media/ufo.png"))
+		enemyX.append(random.randint(0, 735))
+		enemyY.append(random.randint(50, 150))
+		enemyX_change.append(4)
+		enemyY_change.append(40)
 
 def fire_bullet(x, y):
 	global bullet_state
@@ -88,11 +90,18 @@ def isCollision(enemyX, enemyY, bulletX, bulletY):
 	else:
 		return False
 
-def enemy_movement():
-	global score_value, bullet_state, bulletX, bulletY, enemyX, enemyY
+
+def enemy_movement(num_enemies, speed_change):
+	global score_value, bullet_state, bulletX, bulletY, enemyX, enemyY, state, total_enemies_killed, enemies_killed
+
+	kill_goal = font.render("Kill "+str(num_enemies)+" aliens to advance to the next level! Speeds will increase!!", True, (255, 255, 255))
+	screen.blit(kill_goal, (10, 30))
+	create_enemies(num_enemies)
  
 	# Enemy Movement
-	for i in range(num_enemies):
+	for i in range(num_enemies): # move every enemy in list
+		
+
 
 		# Game Over
 		if enemyY[i] > 440:  # trigger the end of the game
@@ -103,14 +112,17 @@ def enemy_movement():
 
 		enemyX[i] += enemyX_change[i]
 		if enemyX[i] <= 0:
-			enemyX_change[i] = 4
+			enemyX_change[i] = speed_change
 			enemyY[i] += enemyY_change[i]
 		elif enemyX[i] >= 736:
-			enemyX_change[i] = -4
+			enemyX_change[i] = -speed_change
 			enemyY[i] += enemyY_change[i]
 
 		collision = isCollision(enemyX[i], enemyY[i], bulletX, bulletY)
 		if collision:
+			total_enemies_killed += 1
+			enemies_killed += 1
+			print("-----------------------------"+str(enemies_killed)+"-----------------")
 			explosion_sound = pygame.mixer.Sound("./media/explosion.wav")
 			explosion_sound.play()
 			bulletY = 480
@@ -120,6 +132,20 @@ def enemy_movement():
 			enemyY[i] = random.randint(50, 150)
 
 		enemy(enemyX[i], enemyY[i], i)
+
+		kills = font.render("Enemies killed: "+str(enemies_killed), True, (255, 255, 255))
+		screen.blit(kills, (150, 10))
+
+		if total_enemies_killed == 2:
+			enemies_killed = 0
+			state = State.level_2
+		elif total_enemies_killed == 6:
+			enemies_killed = 0
+			state = State.level_3
+		elif total_enemies_killed == 12:
+			enemies_killed = 0
+			state = State.end
+
 
 def game_over():  # display the game over text
 	over_font = game_over_font.render("GAME OVER", True, (255, 255, 255))
@@ -188,19 +214,22 @@ while running:
 		playing_background()
 		print("state 1")
 		score_amount = 1
-		enemy_movement()
+
+		enemy_movement(2, 4)
 		
 	elif state is State.level_2:
 		playing_background()
 		print("state 2")
 		score_amount = 5
-		enemy_movement()
+		# score_value = 0
+		enemy_movement(4, 6)
 		
 	elif state is State.level_3:
 		playing_background()
 		print("State 3")
 		score_amount = 10
-		enemy_movement()
+		# score_value = 0
+		enemy_movement(6, 8)
 		
 	elif state is State.menu:
 		print("Menu")
