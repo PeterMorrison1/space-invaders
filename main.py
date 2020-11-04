@@ -15,8 +15,14 @@ background = pygame.image.load("./media/stars.png")
 menu_color = pygame.Color('grey12')
 
 # Sound
-pygame.mixer.music.load("./media/level1_background.ogg")
-pygame.mixer.music.play(-1)
+def play_bgmusic():
+	if state == State.level_1:
+		pygame.mixer.music.load("./media/level1_background.ogg")
+	elif state == State.level_2:
+		pygame.mixer.music.load("./media/level2_background.ogg")
+	elif state == State.level_3:
+		pygame.mixer.music.load("./media/level3_background.ogg")
+	pygame.mixer.music.play(-1)
 
 # Player
 playerImg = pygame.image.load("./media/spaceship.png")
@@ -100,9 +106,6 @@ def enemy_movement(num_enemies, speed_change):
  
 	# Enemy Movement
 	for i in range(num_enemies): # move every enemy in list
-		
-
-
 		# Game Over
 		if enemyY[i] > 440:  # trigger the end of the game
 			for j in range(num_enemies):
@@ -136,13 +139,16 @@ def enemy_movement(num_enemies, speed_change):
 		kills = font.render("Enemies killed: "+str(enemies_killed), True, (255, 255, 255))
 		screen.blit(kills, (150, 10))
 
-		if total_enemies_killed == 2:
+		if total_enemies_killed == 2 and state != State.level_2:
 			enemies_killed = 0
 			state = State.level_2
-		elif total_enemies_killed == 6:
+			play_bgmusic()
+			print("changed")
+		elif total_enemies_killed == 6  and state != State.level_3:
 			enemies_killed = 0
 			state = State.level_3
-		elif total_enemies_killed == 12:
+			play_bgmusic()
+		elif total_enemies_killed == 12 and state != State.end:
 			enemies_killed = 0
 			state = State.end
 
@@ -204,6 +210,7 @@ while running:
 						
 						#Stops the main screen music when the game begins to play
 						pygame.mixer.stop()
+						play_bgmusic()
 		
 		if event.type == pygame.KEYUP:
 			if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -214,7 +221,6 @@ while running:
 		playing_background()
 		print("state 1")
 		score_amount = 1
-
 		enemy_movement(2, 4)
 		
 	elif state is State.level_2:
@@ -246,8 +252,6 @@ while running:
 		screen.blit(start_text, (300, 270))
 	elif state is State.end:
 		print("End")
-
-	
 
 	playerX += playerX_change
 
