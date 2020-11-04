@@ -36,8 +36,8 @@ enemyX = []
 enemyY = []
 enemyX_change = []
 enemyY_change = []
-total_enemies_killed = 0
-enemies_killed = 0
+total_enemies_killed = 0 # used to change through stages, tracking purposes
+enemies_killed = 0 # used to keep track of enemies killed per stage, resets after each stage, display purposes
 
 # Bullet
 bulletImg = pygame.image.load("./media/bullet.png")
@@ -96,7 +96,8 @@ def isCollision(enemyX, enemyY, bulletX, bulletY):
 	else:
 		return False
 
-
+# num_enemies dictate number of enemies per stage
+# speed_change dictate speed of enemies per stage
 def enemy_movement(num_enemies, speed_change):
 	global score_value, bullet_state, bulletX, bulletY, enemyX, enemyY, state, total_enemies_killed, enemies_killed
 
@@ -125,7 +126,6 @@ def enemy_movement(num_enemies, speed_change):
 		if collision:
 			total_enemies_killed += 1
 			enemies_killed += 1
-			print("-----------------------------"+str(enemies_killed)+"-----------------")
 			explosion_sound = pygame.mixer.Sound("./media/explosion.wav")
 			explosion_sound.play()
 			bulletY = 480
@@ -149,7 +149,6 @@ def enemy_movement(num_enemies, speed_change):
 			state = State.level_3
 			play_bgmusic()
 		elif total_enemies_killed == 12 and state != State.end:
-			enemies_killed = 0
 			state = State.end
 
 
@@ -221,21 +220,19 @@ while running:
 		playing_background()
 		print("state 1")
 		score_amount = 1
-		enemy_movement(2, 4)
+		enemy_movement(2, 4) # (num_enemies, speed_change)
 		
 	elif state is State.level_2:
 		playing_background()
 		print("state 2")
 		score_amount = 5
-		# score_value = 0
-		enemy_movement(4, 6)
+		enemy_movement(4, 6) # (num_enemies, speed_change)
 		
 	elif state is State.level_3:
 		playing_background()
 		print("State 3")
 		score_amount = 10
-		# score_value = 0
-		enemy_movement(6, 8)
+		enemy_movement(6, 8) # (num_enemies, speed_change)
 		
 	elif state is State.menu:
 		print("Menu")
