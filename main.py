@@ -15,6 +15,8 @@ background = pygame.image.load("./media/stars.png")
 menu_color = pygame.Color('grey12')
 
 # Sound
+victory_music_played = False
+gameover_music_played = False
 pygame.mixer.music.load("./media/menu_background.ogg")
 pygame.mixer.music.play(-1)
 levelup_sound = pygame.mixer.Sound("./media/level_complete.ogg")
@@ -68,10 +70,6 @@ def show_score(x, y):
 	score = font.render("Score: "+str(score_value), True, (255, 255, 255))
 	screen.blit(score, (x, y))
 
-<<<<<<< HEAD
-=======
-
->>>>>>> df9b7c4d7d2614e6c1d915c164c6beead4e4de0e
 def player(x, y):
 	screen.blit(playerImg, (x, y))
 
@@ -108,7 +106,7 @@ def isCollision(enemyX, enemyY, bulletX, bulletY):
 # num_enemies dictate number of enemies per stage
 # speed_change dictate speed of enemies per stage
 def enemy_movement(num_enemies, speed_change):
-	global score_value, bullet_state, bulletX, bulletY, enemyX, enemyY, state, total_enemies_killed, enemies_killed
+	global score_value, bullet_state, bulletX, bulletY, enemyX, enemyY, state, total_enemies_killed, enemies_killed, gameover_music_played
 
 	kill_goal = font.render("Kill "+str(num_enemies)+" aliens to advance to the next level! Speeds will increase!!", True, (255, 255, 255))
 	screen.blit(kill_goal, (10, 38))
@@ -119,6 +117,10 @@ def enemy_movement(num_enemies, speed_change):
 	for i in range(num_enemies): # move every enemy in list
 		# Game Over
 		if enemyY[i] > 440:  # trigger the end of the game
+			pygame.mixer.music.stop()
+			if gameover_music_played == False:
+				pygame.mixer.Sound.play(gameover_sound)
+				gameover_music_played = True
 			for j in range(num_enemies):
 				enemyY[j] = 2000
 			game_over()
@@ -168,7 +170,6 @@ def enemy_movement(num_enemies, speed_change):
 def game_over():  # display the game over 
 	over_font = game_over_font.render("GAME OVER", True, (255, 255, 255))
 	screen.blit(over_font, (100, 250))
-
 
 def playing_background():
     # Screen Attributes
@@ -264,6 +265,10 @@ while running:
 		screen.blit(title_text, (300, 100))
 		screen.blit(start_text, (300, 270))
 	elif state is State.end:
+		pygame.mixer.music.stop()
+		if victory_music_played == False:
+			pygame.mixer.Sound.play(victory_sound)
+			victory_music_played = True
 		game_complete = missioncomplete_font.render("MISSION COMPLETE", True, (255, 255, 255))
 		screen.blit(game_complete, (100, 250))
 
