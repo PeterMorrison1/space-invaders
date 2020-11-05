@@ -15,6 +15,11 @@ background = pygame.image.load("./media/stars.png")
 menu_color = pygame.Color('grey12')
 
 # Sound
+pygame.mixer.music.load("./media/menu_background.ogg")
+pygame.mixer.music.play(-1)
+levelup_sound = pygame.mixer.Sound("./media/level_complete.ogg")
+victory_sound = pygame.mixer.Sound("./media/victory.ogg")
+gameover_sound = pygame.mixer.Sound("./media/gameover.ogg")
 def play_bgmusic():
 	if state == State.level_1:
 		pygame.mixer.music.load("./media/level1_background.ogg")
@@ -61,8 +66,6 @@ game_over_font = pygame.font.Font("./fonts/Square.ttf", 128)
 def show_score(x, y):
 	score = font.render("Score: "+str(score_value), True, (255, 255, 255))
 	screen.blit(score, (x, y))
-
-
 
 def player(x, y):
 	screen.blit(playerImg, (x, y))
@@ -140,20 +143,23 @@ def enemy_movement(num_enemies, speed_change):
 		screen.blit(kills, (150, 10))
 
 		if total_enemies_killed == 2 and state != State.level_2:
+			pygame.mixer.stop()
+			pygame.mixer.Sound.play(levelup_sound)
 			enemies_killed = 0
 			state = State.level_2
-			play_bgmusic()
+			play_bgmusic() #changes background music
 			print("changed")
 		elif total_enemies_killed == 6  and state != State.level_3:
+			pygame.mixer.stop()
+			pygame.mixer.Sound.play(levelup_sound)
 			enemies_killed = 0
 			state = State.level_3
-			play_bgmusic()
+			play_bgmusic() #changes background music
 		elif total_enemies_killed == 12 and state != State.end:
 			enemies_killed = 0
 			state = State.end
 
-
-def game_over():  # display the game over text
+def game_over():  # display the game over 
 	over_font = game_over_font.render("GAME OVER", True, (255, 255, 255))
 	screen.blit(over_font, (100, 250))
 
