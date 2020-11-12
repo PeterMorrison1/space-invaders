@@ -11,8 +11,8 @@ screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Space Invaders")
 
 # Background
-background = pygame.image.load("./media/stars.png")
 menu_color = pygame.Color('grey12')
+background = pygame.image.load("./media/galaxy.png")
 
 # Sound
 victory_music_played = False
@@ -71,7 +71,7 @@ def show_score(x, y):
 	score = font.render("Score: "+str(score_value), True, (255, 255, 255))
 	screen.blit(score, (x, y))
 
-def player(x, y):
+def player(playerImg, x, y):
 	screen.blit(playerImg, (x, y))
 
 
@@ -167,7 +167,7 @@ def enemy_movement(num_enemies, speed_change):
 			state = State.level_3
 			score_value += 25
 			play_bgmusic()
-
+			
 		# State change (to game over/end)
 		elif total_enemies_killed == 12 and state != State.end:
 			state = State.end
@@ -176,10 +176,11 @@ def game_over():  # display the game over
 	over_font = game_over_font.render("GAME OVER", True, (255, 255, 255))
 	screen.blit(over_font, (100, 250))
 
-def playing_background():
+def playing_background(background):
 	# Screen Attributes
 	screen.fill((0, 0, 0))
 	screen.blit(background, (0, 0))
+
 
 class State(Enum):
 	menu = 1
@@ -238,19 +239,26 @@ while running:
 
 	# --------- ALL STATES ARE IN HERE -------------
 	if state is State.level_1:
-		playing_background()
+		background = pygame.image.load("./media/earth.png")
+		playing_background(background)
 		print("state 1")
 		score_amount = 1
 		enemy_movement(2, 4) # (num_enemies, speed_change)
 		
 	elif state is State.level_2:
-		playing_background()
+		newBackground = pygame.image.load("./media/solarSystem.png")
+		playing_background(newBackground)
+		playerImg = pygame.image.load("./media/pod.png")
+		player(playerImg, playerX, playerY)
 		print("state 2")
 		score_amount = 5
 		enemy_movement(4, 6) # (num_enemies, speed_change)
 		
 	elif state is State.level_3:
-		playing_background()
+		newBackground = pygame.image.load("./media/galaxy.png")
+		playing_background(newBackground)
+		playerImg = pygame.image.load("./media/astronaut.png")
+		player(playerImg, playerX, playerY)
 		print("State 3")
 		score_amount = 10
 		enemy_movement(6, 8) # (num_enemies, speed_change)
@@ -292,7 +300,7 @@ while running:
 		fire_bullet(bulletX, bulletY)
 		bulletY -= bulletY_change
 
-	player(playerX, playerY)
+	player(playerImg, playerX, playerY)
 	show_score(textX, textY)
 
 	pygame.display.update()
