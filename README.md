@@ -14,7 +14,9 @@ Audio modifications, such as seperate background music for main menu and each le
 Visual transformations for the background and the player model in each level gives the player a sense of progression and implies a story as they progress deeper into space.
 
 ## Levels
-With each level, the number of enemies increases by 2, as well as their speed. Even though this makes the levels harder as it goes on, it challenges the player and gives a sense of accomplishment when all levels are completed. Additonally, the value of each alien killed goes up each level by 5 points.  
+With each level, the number of enemies increases by 2, as well as their speed. Even though this makes the levels harder as it goes on, it challenges the player and gives a sense of accomplishment when all levels are completed. Additonally, the value of each alien killed goes up each level by 5 points. 
+
+The player is also given a big bonus of points on completing each round (25) to reward reaching higher levels and scores.
 
 
 ## Authors
