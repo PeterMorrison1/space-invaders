@@ -241,7 +241,6 @@ while running:
 	if state is State.level_1:
 		background = pygame.image.load("./media/earth.png")
 		playing_background(background)
-		print("state 1")
 		score_amount = 1
 		enemy_movement(2, 4) # (num_enemies, speed_change)
 		
@@ -250,7 +249,6 @@ while running:
 		playing_background(newBackground)
 		playerImg = pygame.image.load("./media/pod.png")
 		player(playerImg, playerX, playerY)
-		print("state 2")
 		score_amount = 5
 		enemy_movement(4, 6) # (num_enemies, speed_change)
 		
@@ -259,12 +257,10 @@ while running:
 		playing_background(newBackground)
 		playerImg = pygame.image.load("./media/astronaut.png")
 		player(playerImg, playerX, playerY)
-		print("State 3")
 		score_amount = 10
 		enemy_movement(6, 8) # (num_enemies, speed_change)
 		
 	elif state is State.menu:
-		print("Menu")
 		screen.fill(menu_color)
 
 		# Resets scores & name   
