@@ -3,6 +3,7 @@
 # Mods 
 
 ## Main Menu
+A main menu was added to allow players to choose when to start, rather than being forced right into the game.
 
 ## Victory Screen
 Victory screen added after all levels are completed in the game. The victory screen provides user with final score count and a victory game message.
