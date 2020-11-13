@@ -151,7 +151,7 @@ def enemy_movement(num_enemies, speed_change):
 		enemy(enemyX[i], enemyY[i], i)
 
 		# State change (to level 2)
-		if total_enemies_killed == 3 and state != State.level_2:
+		if total_enemies_killed == 2 and state != State.level_2:
 			pygame.mixer.stop()
 			pygame.mixer.Sound.play(levelup_sound)
 			enemies_killed = 0
@@ -160,7 +160,7 @@ def enemy_movement(num_enemies, speed_change):
 			play_bgmusic()
 			
 		# State change (to level 3)
-		elif total_enemies_killed == 7  and state != State.level_3:
+		elif total_enemies_killed == 6  and state != State.level_3:
 			pygame.mixer.stop()
 			pygame.mixer.Sound.play(levelup_sound)
 			enemies_killed = 0
@@ -169,7 +169,7 @@ def enemy_movement(num_enemies, speed_change):
 			play_bgmusic()
 			
 		# State change (to game over/end)
-		elif total_enemies_killed == 13 and state != State.end:
+		elif total_enemies_killed == 12 and state != State.end:
 			state = State.end
 
 def game_over():  # display the game over 
@@ -243,7 +243,7 @@ while running:
 		playing_background(background)
 		print("state 1")
 		score_amount = 1
-		enemy_movement(3, 4) # (num_enemies, speed_change)
+		enemy_movement(2, 4) # (num_enemies, speed_change)
 		
 	elif state is State.level_2:
 		newBackground = pygame.image.load("./media/solarSystem.png")
